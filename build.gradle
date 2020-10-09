@@ -38,20 +38,20 @@ allprojects {
     }
 }
 
-configure(subprojects - project(":libgdx:tests:gdx-tests-android")) {
-    apply plugin: "idea"
-    apply plugin: "java"
-
-    compileJava {
-        options.fork = true
-        options.incremental = true
-    }
-}
+//configure(subprojects - project(":libgdx:tests:gdx-tests-android")) {
+//    apply plugin: "idea"
+//    apply plugin: "java"
+//
+//    compileJava {
+//        options.fork = true
+//        options.incremental = true
+//    }
+//}
 
 ant.importBuild("fetch.xml") { antTargetName ->
-    "ant-task-" + antTargetName    
+    "ant-task-" + antTargetName
 }
-task fetchNatives(dependsOn: "ant-task-all"){
+task fetchNatives(dependsOn: "ant-task-all") {
     doLast {
     }
 }
