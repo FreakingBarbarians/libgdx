@@ -15,6 +15,6 @@
  ******************************************************************************/
 
 dependencies {
-    compileOnly project(":gdx")
-    compileOnly project(":extensions:gdx-jnigen")
+    compileOnly project(":libgdx:gdx")
+    compileOnly project(":libgdx:extensions:gdx-jnigen")
 }

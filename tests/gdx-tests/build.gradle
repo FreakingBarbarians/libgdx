@@ -15,10 +15,10 @@
  ******************************************************************************/
 
 dependencies {
-    compile project(":gdx")
-    compile project(":extensions:gdx-box2d:gdx-box2d-core")
-    compile project(":extensions:gdx-bullet")
-    compile project(":extensions:gdx-controllers:gdx-controllers-core")
-    compile project(":extensions:gdx-freetype")
-    compileOnly project(":extensions:gdx-tools")
+    compile project(":libgdx:gdx")
+    compile project(":libgdx:extensions:gdx-box2d:gdx-box2d-core")
+    compile project(":libgdx:extensions:gdx-bullet")
+    compile project(":libgdx:extensions:gdx-controllers:gdx-controllers-core")
+    compile project(":libgdx:extensions:gdx-freetype")
+    compileOnly project(":libgdx:extensions:gdx-tools")
 }

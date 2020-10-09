@@ -15,10 +15,10 @@
  ******************************************************************************/
 
 dependencies {
-    compile project(":gdx")
-    compile project(":backends:gdx-backend-lwjgl")
-    compile project(":extensions:gdx-freetype")
-    compile project(":backends:gdx-backend-headless")
+    compile project(":libgdx:gdx")
+    compile project(":libgdx:backends:gdx-backend-lwjgl")
+    compile project(":libgdx:extensions:gdx-freetype")
+    compile project(":libgdx:backends:gdx-backend-headless")
     compile testnatives.desktop
 }
 

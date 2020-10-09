@@ -135,4 +135,3 @@ testnatives.ios = [
         files("extensions/gdx-bullet/libs/ios32/"),
         files("extensions/gdx-freetype/libs/ios32/")
 ]
-

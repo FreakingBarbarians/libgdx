@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 dependencies {
-    compileOnly project(":backends:gdx-backend-android")
+    compileOnly project(":libgdx:backends:gdx-backend-android")
     compileOnly fileTree(dir: '../../../backends/gdx-backend-android/libs', include: ['*.jar'])
-    compileOnly project(":extensions:gdx-controllers:gdx-controllers-core")
+    compileOnly project(":libgdx:extensions:gdx-controllers:gdx-controllers-core")
 }

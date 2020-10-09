@@ -24,13 +24,13 @@ apply plugin: "com.android.application"
 apply from: "obb.gradle"
 
 dependencies {
-	implementation project(":tests:gdx-tests")
-	implementation project(":gdx")
-	implementation project(":extensions:gdx-box2d:gdx-box2d-core")
-	implementation project(":extensions:gdx-bullet")
-	implementation project(":extensions:gdx-controllers:gdx-controllers-android")
-	implementation project(":extensions:gdx-freetype")
-	implementation project(":backends:gdx-backend-android")
+	implementation project(":libgdx:tests:gdx-tests")
+	implementation project(":libgdx:gdx")
+	implementation project(":libgdx:extensions:gdx-box2d:gdx-box2d-core")
+	implementation project(":libgdx:extensions:gdx-bullet")
+	implementation project(":libgdx:extensions:gdx-controllers:gdx-controllers-android")
+	implementation project(":libgdx:extensions:gdx-freetype")
+	implementation project(":libgdx:backends:gdx-backend-android")
 	implementation libraries.android
 	implementation "androidx.multidex:multidex:${versions.multiDex}"
 }
