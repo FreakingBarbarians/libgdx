@@ -16,14 +16,16 @@
 
 package com.badlogic.gdx.math;
 
-import java.io.Serializable;
-
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.NioBufferObject;
 import com.badlogic.gdx.utils.NumberUtils;
+
+import java.io.Serializable;
+import java.nio.ByteBuffer;
 
 /** Encapsulates a 2D vector. Allows chaining methods by returning a reference to itself
  * @author badlogicgames@gmail.com */
-public class Vector2 implements Serializable, Vector<Vector2> {
+public class Vector2 implements Serializable, Vector<Vector2>, NioBufferObject {
 	private static final long serialVersionUID = 913902788239530931L;
 
 	public final static Vector2 X = new Vector2(1, 0);
@@ -595,5 +597,17 @@ public class Vector2 implements Serializable, Vector<Vector2> {
 		this.x = 0;
 		this.y = 0;
 		return this;
+	}
+
+	@Override
+	public void writeToBuffer(ByteBuffer buffer) {
+		buffer.putFloat(x);
+		buffer.putFloat(y);
+	}
+
+	@Override
+	public void readFromBuffer(ByteBuffer buffer) {
+		assert(false);
+		System.exit(-1);
 	}
 }
