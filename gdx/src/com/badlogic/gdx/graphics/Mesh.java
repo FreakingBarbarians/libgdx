@@ -16,26 +16,10 @@
 
 package com.badlogic.gdx.graphics;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.glutils.IndexArray;
-import com.badlogic.gdx.graphics.glutils.IndexBufferObject;
-import com.badlogic.gdx.graphics.glutils.IndexBufferObjectSubData;
-import com.badlogic.gdx.graphics.glutils.IndexData;
-import com.badlogic.gdx.graphics.glutils.InstanceBufferObject;
-import com.badlogic.gdx.graphics.glutils.InstanceData;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.graphics.glutils.VertexArray;
-import com.badlogic.gdx.graphics.glutils.VertexBufferObject;
-import com.badlogic.gdx.graphics.glutils.VertexBufferObjectSubData;
-import com.badlogic.gdx.graphics.glutils.VertexBufferObjectWithVAO;
-import com.badlogic.gdx.graphics.glutils.VertexData;
+import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -44,6 +28,11 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 /** <p>
  * A Mesh holds vertices composed of attributes specified by a {@link VertexAttributes} instance. The vertices are held either in
@@ -555,6 +544,10 @@ public class Mesh implements Disposable {
 		render(shader, primitiveType, 0, indices.getNumMaxIndices() > 0 ? getNumIndices() : getNumVertices(), autoBind);
 	}
 
+	public void render(int primitiveType) {
+		renderWithoutShaderBinding(primitiveType, 0, indices.getNumMaxIndices() > 0 ? getNumIndices() : getNumVertices());
+	}
+
 	/** <p>
 	 * Renders the mesh using the given primitive type. offset specifies the offset into either the vertex buffer or the index
 	 * buffer depending on whether indices are defined. count specifies the number of vertices or indices to use thus count /
@@ -580,6 +573,10 @@ public class Mesh implements Disposable {
 	 * @param count number of vertices or indices to use */
 	public void render (ShaderProgram shader, int primitiveType, int offset, int count) {
 		render(shader, primitiveType, offset, count, autoBind);
+	}
+
+	public void render(int primitiveType, int offset, int count) {
+		renderWithoutShaderBinding(primitiveType, offset, count);
 	}
 
 	/** <p>
@@ -649,6 +646,46 @@ public class Mesh implements Disposable {
 		}
 
 		if (autoBind) unbind(shader);
+	}
+
+	public void renderWithoutShaderBinding(int primitiveType, int offset, int count) {
+		if(count == 0) { return; }
+		if (isVertexArray) {
+			if (indices.getNumIndices() > 0) {
+				ShortBuffer buffer = indices.getBuffer();
+				int oldPosition = buffer.position();
+				int oldLimit = buffer.limit();
+				buffer.position(offset);
+				buffer.limit(offset + count);
+				Gdx.gl20.glDrawElements(primitiveType, count, GL20.GL_UNSIGNED_SHORT, buffer);
+				buffer.position(oldPosition);
+				buffer.limit(oldLimit);
+			} else {
+				Gdx.gl20.glDrawArrays(primitiveType, offset, count);
+			}
+		} else {
+			int numInstances = 0;
+			if (isInstanced) numInstances = instances.getNumInstances();
+
+			if (indices.getNumIndices() > 0) {
+				if (count + offset > indices.getNumMaxIndices()) {
+					throw new GdxRuntimeException("Mesh attempting to access memory outside of the index buffer (count: "
+						+ count + ", offset: " + offset + ", max: " + indices.getNumMaxIndices() + ")");
+				}
+
+				if (isInstanced && numInstances > 0){
+					Gdx.gl30.glDrawElementsInstanced(primitiveType, count, GL20.GL_UNSIGNED_SHORT, offset * 2, numInstances);
+				} else {
+					Gdx.gl20.glDrawElements(primitiveType, count, GL20.GL_UNSIGNED_SHORT, offset * 2);
+				}
+			} else {
+				if (isInstanced && numInstances > 0){
+					Gdx.gl30.glDrawArraysInstanced(primitiveType, offset, count, numInstances);
+				} else {
+					Gdx.gl20.glDrawArrays(primitiveType, offset, count);
+				}
+			}
+		}
 	}
 
 	/** Frees all resources associated with this Mesh */

@@ -539,7 +539,7 @@ public class BitmapFontCache {
 	public float[] getVertices () {
 		return getVertices(0);
 	}
-
+	public int getPages () { return pageVertices.length; }
 	public float[] getVertices (int page) {
 		return pageVertices[page];
 	}
